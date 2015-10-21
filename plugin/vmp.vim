@@ -19,26 +19,23 @@ function! PreviewMKD()
     style = cssfile.read
 
     layout = <<-LAYOUT
-  <!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
+    <!DOCTYPE html>
+    <html lang="en">
       <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <style type="text/css">
-        #{style}
-      </style>
-
-      <title> #{File.basename(name)} </title>
+          <meta charset="utf-8"/>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+          <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+          <style type="text/css">
+            #{style}
+          </style>
+          <title>#{File.basename(name)}</title>
       </head>
       <body>
-
-        <h4 id="title">
-          #{File.basename(name)}
-        </h4>
-
-        <div id="content">
           #{Kramdown::Document.new(text).to_html}
+          <script>
+            $('table').addClass('table');
+          </script>
         </div>
       </body>
     </html>
