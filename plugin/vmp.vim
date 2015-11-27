@@ -1,7 +1,5 @@
-function! PreviewMKD()
+function! ConvertMarkdownToHTML()
   ruby << RUBY
-
-
     VIM.evaluate('&runtimepath').split(',').each do |path|
       $LOAD_PATH.unshift(File.join(path, 'plugin', 'vim-markdown-preview'))
     end
@@ -52,4 +50,11 @@ function! PreviewMKD()
 RUBY
 endfunction
 
-:command! Mm :call PreviewMKD()
+function! ConvertMarkdownToDocX()
+    ruby << RUBY
+    VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
+    file = File.join('/tmp', File.basename(name) + '.docx')
+    Vim.command("silent w !pandoc -o '%s'" % [ file ])
+    Vim.command("silent !open -n '%s'" % [ file ])
+RUBY
+endfunction
