@@ -43,7 +43,7 @@ function! ConvertMarkdownToHTML()
     unless File.extname(name) =~ /\.(md|mkd|markdown|txt)/
       VIM.message('This file extension is not supported for Markdown previews')
     else
-      file = File.join('/tmp', File.basename(name) + '.html')
+      file = File.join(name + '.html')
       File.open('%s' % [ file ], 'w') { |f| f.write(layout) }
       Vim.command("silent !open '%s'" % [ file ])
     end
@@ -53,7 +53,7 @@ endfunction
 function! ConvertMarkdownToDocX()
     ruby << RUBY
     VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
-    file = File.join('/tmp', File.basename(name) + '.docx')
+    file = File.join(name + '.docx')
     Vim.command("silent w !pandoc -o '%s'" % [ file ])
     Vim.command("silent !open -n '%s'" % [ file ])
 RUBY
