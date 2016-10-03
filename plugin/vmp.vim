@@ -54,6 +54,7 @@ function! ConvertMarkdownToDocX()
     ruby << RUBY
     VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
     file = File.join(name + '.docx')
+    Vim.command("lcd %:p:h")
     Vim.command("silent w !pandoc -o '%s'" % [ file ])
     Vim.command("silent !open -n '%s'" % [ file ])
 RUBY
