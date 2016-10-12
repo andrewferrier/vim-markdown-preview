@@ -1,3 +1,5 @@
+" TODO: Use pandoc instead, use --self-contained option for HTML.
+
 function! ConvertMarkdownToHTML()
   ruby << RUBY
     VIM.evaluate('&runtimepath').split(',').each do |path|
