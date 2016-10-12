@@ -56,6 +56,6 @@ function! ConvertMarkdownToDocX()
     file = File.join(name + '.docx')
     Vim.command("lcd %:p:h")
     Vim.command("silent w !pandoc -o '%s'" % [ file ])
-    Vim.command("silent !open -n '%s'" % [ file ])
+    Vim.command("silent !open '%s'" % [ file ])
 RUBY
 endfunction
