@@ -1,5 +1,15 @@
 " TODO: Use pandoc instead, use --self-contained option for HTML.
 
+function! ConvertMarkdownToPDF()
+    ruby << RUBY
+    VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
+    file = File.join(name + '.pdf')
+    Vim.command("lcd %:p:h")
+    Vim.command("silent w !pandoc -o '%s'" % [ file ])
+    Vim.command("silent !open '%s'" % [ file ])
+RUBY
+endfunction
+
 function! ConvertMarkdownToHTML()
   ruby << RUBY
     VIM.evaluate('&runtimepath').split(',').each do |path|
