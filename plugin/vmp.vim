@@ -1,5 +1,13 @@
 " TODO: Use pandoc instead, use --self-contained option for HTML.
 
+function! CheckDependency(command)
+    if !executable(a:command)
+        echo a:command . ' not available'
+    endif
+endfunction
+
+call CheckDependency('pandoc')
+
 function! ConvertMarkdownToPDF()
     ruby << RUBY
     VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
