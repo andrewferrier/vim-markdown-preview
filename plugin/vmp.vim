@@ -1,4 +1,4 @@
-" TODO: Use pandoc instead, use --self-contained option for HTML.
+" TODO: Use markdown-pdf instead, use --self-contained option for HTML.
 
 function! CheckDependency(command)
     if !executable(a:command)
