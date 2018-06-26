@@ -13,7 +13,7 @@ function! ConvertMarkdownToPDF()
     VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
     file = File.join(name + '.pdf')
     Vim.command("lcd %:p:h")
-    Vim.command("silent w !pandoc -o '%s'" % [ file ])
+    Vim.command("silent w !pandoc -V geometry:margin=0.5in -o '%s'" % [ file ])
     Vim.command("silent !open '%s'" % [ file ])
 RUBY
 endfunction
