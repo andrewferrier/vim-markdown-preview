@@ -9,13 +9,27 @@ endfunction
 call CheckDependency('pandoc')
 
 function! ConvertMarkdownToPDF()
-    ruby << RUBY
-    VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
-    file = File.join(name + '.pdf')
-    Vim.command("lcd %:p:h")
-    Vim.command("silent w !pandoc -V geometry:margin=0.5in -o '%s'" % [ file ])
-    Vim.command("silent !open '%s'" % [ file ])
-RUBY
+    call CheckDependency('pdflatex')
+
+    if bufname('%') ==# ''
+        let l:filename = 'No Name.md'
+    else
+        let l:filename = bufname('%')
+    endif
+    let l:filename = l:filename . '.pdf'
+    call system('pandoc -V geometry:margin=0.5in -o ' . l:filename, join(getline(1,'$'),"\n"))
+    call system('open ' . l:filename)
+endfunction
+
+function! ConvertMarkdownToDocX()
+    if bufname('%') ==# ''
+        let l:filename = 'No Name.md'
+    else
+        let l:filename = bufname('%')
+    endif
+    let l:filename = l:filename . '.docx'
+    call system('pandoc -o ' . l:filename, join(getline(1,'$'),"\n"))
+    call system('open ' . l:filename)
 endfunction
 
 function! ConvertMarkdownToHTML()
@@ -67,15 +81,5 @@ function! ConvertMarkdownToHTML()
       File.open('%s' % [ file ], 'w') { |f| f.write(layout) }
       Vim.command("silent !open '%s'" % [ file ])
     end
-RUBY
-endfunction
-
-function! ConvertMarkdownToDocX()
-    ruby << RUBY
-    VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
-    file = File.join(name + '.docx')
-    Vim.command("lcd %:p:h")
-    Vim.command("silent w !pandoc -o '%s'" % [ file ])
-    Vim.command("silent !open '%s'" % [ file ])
 RUBY
 endfunction
