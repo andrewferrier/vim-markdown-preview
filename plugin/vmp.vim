@@ -2,7 +2,7 @@
 
 function! CheckDependency(command)
     if !executable(a:command)
-        echo a:command . ' not available'
+        echoerr a:command . ' not available'
     endif
 endfunction
 
