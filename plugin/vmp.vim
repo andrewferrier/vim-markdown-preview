@@ -6,28 +6,29 @@ function! CheckDependency(command)
     endif
 endfunction
 
-call CheckDependency('pandoc')
-
-function! ConvertMarkdownToPDF()
-    call CheckDependency('pdflatex')
-
+function! GetGeneratedFilename(ext)
     if bufname('%') ==# ''
         let l:filename = 'No Name.md'
     else
         let l:filename = bufname('%')
     endif
-    let l:filename = l:filename . '.pdf'
+
+    return l:filename . '.' . a:ext
+endfunction
+
+function! ConvertMarkdownToPDF()
+    call CheckDependency('pandoc')
+    call CheckDependency('pdflatex')
+
+    let l:filename = GetGeneratedFilename('pdf')
     call system('pandoc -V geometry:margin=0.5in -o ' . l:filename, join(getline(1,'$'),"\n"))
     call system('open ' . l:filename)
 endfunction
 
 function! ConvertMarkdownToDocX()
-    if bufname('%') ==# ''
-        let l:filename = 'No Name.md'
-    else
-        let l:filename = bufname('%')
-    endif
-    let l:filename = l:filename . '.docx'
+    call CheckDependency('pandoc')
+
+    let l:filename = GetGeneratedFilename('docx')
     call system('pandoc -o ' . l:filename, join(getline(1,'$'),"\n"))
     call system('open ' . l:filename)
 endfunction
