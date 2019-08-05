@@ -1,12 +1,12 @@
 " TODO: Use markdown-pdf instead, use --self-contained option for HTML.
 
-function! CheckDependency(command)
+function! CheckDependency(command) abort
     if !executable(a:command)
         echoerr a:command . ' not available'
     endif
 endfunction
 
-function! GetGeneratedFilename(ext)
+function! GetGeneratedFilename(ext) abort
     if bufname('%') ==# ''
         let l:filename = 'No Name.md'
     else
@@ -16,7 +16,7 @@ function! GetGeneratedFilename(ext)
     return l:filename . '.' . a:ext
 endfunction
 
-function! ConvertMarkdownToPDF()
+function! ConvertMarkdownToPDF() abort
     call CheckDependency('pandoc')
     call CheckDependency('pdflatex')
 
@@ -25,7 +25,7 @@ function! ConvertMarkdownToPDF()
     call system('open ' . l:filename)
 endfunction
 
-function! ConvertMarkdownToDocX()
+function! ConvertMarkdownToDocX() abort
     call CheckDependency('pandoc')
 
     let l:filename = GetGeneratedFilename('docx')
@@ -33,7 +33,7 @@ function! ConvertMarkdownToDocX()
     call system('open ' . l:filename)
 endfunction
 
-function! ConvertMarkdownToHTML()
+function! ConvertMarkdownToHTML() abort
   ruby << RUBY
     VIM.evaluate('&runtimepath').split(',').each do |path|
       $LOAD_PATH.unshift(File.join(path, 'plugin', 'vim-markdown-preview'))
