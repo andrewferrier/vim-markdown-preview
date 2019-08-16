@@ -18,10 +18,10 @@ endfunction
 
 function! ConvertMarkdownToPDF() abort
     call CheckDependency('pandoc')
-    call CheckDependency('pdflatex')
+    call CheckDependency('wkhtmltopdf')
 
     let l:filename = GetGeneratedFilename('pdf')
-    call system('pandoc -V geometry:margin=0.5in -o ' . l:filename, join(getline(1,'$'),"\n"))
+    call system('pandoc -t html -V geometry:margin=0.5in -o ' . l:filename, join(getline(1,'$'),"\n"))
     call system('open ' . l:filename)
 endfunction
 
