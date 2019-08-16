@@ -2,13 +2,13 @@
 
 let s:scriptpath = expand('<sfile>:p:h')
 
-function! CheckDependency(command) abort
+function! s:CheckDependency(command) abort
     if !executable(a:command)
         echoerr a:command . ' not available'
     endif
 endfunction
 
-function! GetGeneratedFilename(ext) abort
+function! s:GenerateFilename(ext) abort
     if bufname('%') ==# ''
         let l:filename = 'No Name.md'
     else
@@ -18,27 +18,8 @@ function! GetGeneratedFilename(ext) abort
     return l:filename . '.' . a:ext
 endfunction
 
-function! ConvertMarkdownToPDF() abort
-    call CheckDependency('pandoc')
-    call CheckDependency('wkhtmltopdf')
-
-    let l:filename = GetGeneratedFilename('pdf')
-    call system('pandoc -t html -V geometry:margin=0.5in -o ' . l:filename, join(getline(1,'$'),"\n"))
-    call system('open ' . l:filename)
-endfunction
-
-function! ConvertMarkdownToDocX() abort
-    call CheckDependency('pandoc')
-
-    let l:filename = GetGeneratedFilename('docx')
-    call system('pandoc -o ' . l:filename, join(getline(1,'$'),"\n"))
-    call system('open ' . l:filename)
-endfunction
-
-function! ConvertMarkdownToHTML() abort
-    call CheckDependency('markdown-it')
-
-    let l:filename = GetGeneratedFilename('html')
+function! s:GenerateHTML() abort
+    call s:CheckDependency('markdown-it')
 
     let l:csscontent = system('cat "' . s:scriptpath . '/markdown-preview.css"')
     let l:htmlcontent = system('markdown-it', join(getline(1,'$'),"\n"))
@@ -50,6 +31,30 @@ function! ConvertMarkdownToHTML() abort
                 \ . '<style type="text/css">' . l:csscontent . '</style><title>FIXME</title></head>'
                 \ . '<body>' . l:htmlcontent . '<script>$("table").addClass("table");</script>'
                 \ . '</div></body></html>'
+
+    return l:html
+endfunction
+
+function! ConvertMarkdownToPDF() abort
+    call s:CheckDependency('wkhtmltopdf')
+
+    let l:filename = s:GenerateFilename('pdf')
+    let l:html = s:GenerateHTML()
+    call system('wkhtmltopdf - ' . l:filename, l:html)
+    call system('open ' . l:filename)
+endfunction
+
+function! ConvertMarkdownToDocX() abort
+    call s:CheckDependency('pandoc')
+
+    let l:filename = s:GenerateFilename('docx')
+    call system('pandoc -o ' . l:filename, join(getline(1,'$'),"\n"))
+    call system('open ' . l:filename)
+endfunction
+
+function! ConvertMarkdownToHTML() abort
+    let l:filename = s:GenerateFilename('html')
+    let l:html = s:GenerateHTML()
 
     call writefile(split(l:html, "\n", 1), glob(l:filename), 'b')
     call system('open ' . l:filename)
