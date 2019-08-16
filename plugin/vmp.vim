@@ -1,5 +1,7 @@
 " TODO: Use markdown-pdf instead, use --self-contained option for HTML.
 
+let s:scriptpath = expand('<sfile>:p:h')
+
 function! CheckDependency(command) abort
     if !executable(a:command)
         echoerr a:command . ' not available'
@@ -34,53 +36,21 @@ function! ConvertMarkdownToDocX() abort
 endfunction
 
 function! ConvertMarkdownToHTML() abort
-  ruby << RUBY
-    VIM.evaluate('&runtimepath').split(',').each do |path|
-      $LOAD_PATH.unshift(File.join(path, 'plugin', 'vim-markdown-preview'))
-    end
+    call CheckDependency('markdown-it')
 
-    require('kramdown/kramdown')
+    let l:filename = GetGeneratedFilename('html')
 
-    text = Array.new(VIM::Buffer.current.count) do |i|
-      VIM::Buffer.current[i + 1]
-    end.join("\n")
+    let l:csscontent = system('cat "' . s:scriptpath . '/markdown-preview.css"')
+    let l:htmlcontent = system('markdown-it', join(getline(1,'$'),"\n"))
 
-    VIM::Buffer.current.name.nil? ? (name = 'No Name.md') : (name = Vim::Buffer.current.name)
+    let l:html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
+                \ . '<meta http-equiv="X-UA-Compatible" content="IE=edge"/>'
+                \ . '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">'
+                \ . '<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>'
+                \ . '<style type="text/css">' . l:csscontent . '</style><title>FIXME</title></head>'
+                \ . '<body>' . l:htmlcontent . '<script>$("table").addClass("table");</script>'
+                \ . '</div></body></html>'
 
-    preview_path = VIM.evaluate('&runtimepath').split(',').select{|path| path =~ /vim-markdown-preview/}.first
-    cssfile = File.open("#{preview_path}/plugin/markdown-preview.css")
-    style = cssfile.read
-
-    layout = <<-LAYOUT
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-          <meta charset="utf-8"/>
-          <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-          <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-          <style type="text/css">
-            #{style}
-          </style>
-          <title>#{File.basename(name)}</title>
-      </head>
-      <body>
-          #{Kramdown::Document.new(text).to_html}
-          <script>
-            $('table').addClass('table');
-          </script>
-        </div>
-      </body>
-    </html>
-    LAYOUT
-
-
-    unless File.extname(name) =~ /\.(md|mkd|markdown|txt)/
-      VIM.message('This file extension is not supported for Markdown previews')
-    else
-      file = File.join(name + '.html')
-      File.open('%s' % [ file ], 'w') { |f| f.write(layout) }
-      Vim.command("silent !open '%s'" % [ file ])
-    end
-RUBY
+    call writefile(split(l:html, "\n", 1), glob(l:filename), 'b')
+    call system('open ' . l:filename)
 endfunction
