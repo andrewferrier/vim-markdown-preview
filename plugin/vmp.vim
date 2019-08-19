@@ -1,5 +1,3 @@
-" TODO: Use markdown-pdf instead, use --self-contained option for HTML.
-
 let s:scriptpath = expand('<sfile>:p:h')
 
 function! s:CheckDependency(command) abort
