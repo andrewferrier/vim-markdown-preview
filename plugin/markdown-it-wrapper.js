@@ -2,6 +2,17 @@
 
 'use strict'
 
+const md = require('markdown-it')({
+  html: true,
+  typographer: true
+})
+
+md.use(require('markdown-it-table-of-contents'), {
+  includeLevel: [1, 2, 3]
+})
+
+md.use(require('markdown-it-anchor'))
+
 function readFile (encoding, callback) {
   // read from stdin
   var chunks = []
@@ -16,17 +27,12 @@ function readFile (encoding, callback) {
 }
 
 readFile('utf8', function (err, input) {
-  var output, md
+  var output
 
   if (err) {
     console.error(err.stack || err.message || String(err))
     process.exit(1)
   }
-
-  md = require('markdown-it')({
-    html: true,
-    typographer: true
-  })
 
   try {
     output = md.render(input)
