@@ -26,10 +26,11 @@ endfunction
 function! s:GenerateHTML() abort
     call s:CheckDependency('markdown-it')
 
+    let l:markdownitwrapper = s:scriptpath . '/markdown-it-wrapper.js'
     let l:csscontent = system('cat "' . s:scriptpath . '/markdown-preview.css"')
-    let l:htmlcontent = system('markdown-it', join(getline(1,'$'),"\n"))
-    let l:filename = s:GetFilename()
+    let l:htmlcontent = system(l:markdownitwrapper, join(getline(1,'$'),"\n"))
 
+    let l:filename = s:GetFilename()
     let l:html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
                 \ . '<meta http-equiv="X-UA-Compatible" content="IE=edge"/>'
                 \ . '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">'
@@ -62,6 +63,6 @@ function! ConvertMarkdownToHTML() abort
     let l:filename = s:GenerateFilename('html')
     let l:html = s:GenerateHTML()
 
-    call writefile(split(l:html, "\n", 1), glob(l:filename), 'b')
+    call writefile(split(l:html, "\n", 1), l:filename, 'b')
     call system('open ' . l:filename)
 endfunction
