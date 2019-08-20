@@ -7,6 +7,11 @@ const md = require('markdown-it')({
   typographer: true
 })
 
+// See https://github.com/markdown-it/markdown-it/issues/117#issuecomment-109386469
+md.renderer.rules.table_open = function (tokens, idx) {
+  return '<table class="table">'
+}
+
 md.use(require('markdown-it-table-of-contents'), {
   includeLevel: [1, 2, 3]
 })
