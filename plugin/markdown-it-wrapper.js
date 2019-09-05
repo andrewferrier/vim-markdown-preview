@@ -17,7 +17,7 @@ md.renderer.rules.table_open = function table_open(tokens, idx) {
 
 md.use(require("markdown-it-table-of-contents"), {
   /* eslint no-magic-numbers: ["error", { "ignore": [1, 2, 3] }] */
-  "includeLevel": [1, 2, 3]
+  "includeLevel": [2, 3]
 });
 
 md.use(require("markdown-it-anchor"));
