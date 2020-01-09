@@ -52,7 +52,7 @@ function! ConvertMarkdownToPDF() abort
     let l:filename = s:GenerateFilename('pdf')
     let l:html = s:GenerateHTML()
     call system('wkhtmltopdf - ' . l:filename, l:html)
-    call system(s:open_command . ' ' . l:filename)
+    call system(s:open_command . ' ' . l:filename . '&')
 endfunction
 
 function! ConvertMarkdownToDocX() abort
@@ -60,7 +60,7 @@ function! ConvertMarkdownToDocX() abort
 
     let l:filename = s:GenerateFilename('docx')
     call system('pandoc -o ' . l:filename, join(getline(1,'$'),"\n"))
-    call system(s:open_command . ' ' . l:filename)
+    call system(s:open_command . ' ' . l:filename . '&')
 endfunction
 
 function! ConvertMarkdownToHTML() abort
@@ -68,5 +68,5 @@ function! ConvertMarkdownToHTML() abort
     let l:html = s:GenerateHTML()
 
     call writefile(split(l:html, "\n", 1), l:filename, 'b')
-    call system(s:open_command . ' ' . l:filename)
+    call system(s:open_command . ' ' . l:filename . '&')
 endfunction
