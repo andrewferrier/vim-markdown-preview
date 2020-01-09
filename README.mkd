@@ -1,4 +1,4 @@
-## vim-markdown-preview
+# vim-markdown-preview
 
 _vim-markdown-preview_ adds the option to preview markdown documents in the
 browser (using HTML) from the vim editor, or to export to MS Word.
@@ -10,6 +10,7 @@ basic styling. If previewing as MS Word, the plugin uses pandoc to convert.
 
 Install using any standard [plugin
 manager](http://vi.stackexchange.com/questions/388/what-is-the-difference-between-the-vim-package-managers).
+You then need to run `npm install` inside the `plugin/` directory.
 
 ## Usage
 
@@ -22,8 +23,6 @@ directly, or binding them to keystrokes in your `~/.vimrc`:
 ## Dependencies
 
 * vim
-* Ruby support for vim.
-* kramdown (bundled with this package) - for Markdown-to-HTML
 * pandoc (needs a separate install) - for Markdown-to-MSWord
 
 ## OSX
