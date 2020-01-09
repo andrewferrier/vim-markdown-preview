@@ -1,5 +1,11 @@
 let s:scriptpath = expand('<sfile>:p:h')
 
+let s:open_command = 'open'
+
+if !executable(s:open_command)
+    let s:open_command = 'nohup xdg-open'
+endif
+
 function! s:CheckDependency(command) abort
     if !executable(a:command)
         echoerr a:command . ' not available'
@@ -45,7 +51,7 @@ function! ConvertMarkdownToPDF() abort
     let l:filename = s:GenerateFilename('pdf')
     let l:html = s:GenerateHTML()
     call system('wkhtmltopdf - ' . l:filename, l:html)
-    call system('open ' . l:filename)
+    call system(s:open_command . ' ' . l:filename)
 endfunction
 
 function! ConvertMarkdownToDocX() abort
@@ -53,7 +59,7 @@ function! ConvertMarkdownToDocX() abort
 
     let l:filename = s:GenerateFilename('docx')
     call system('pandoc -o ' . l:filename, join(getline(1,'$'),"\n"))
-    call system('open ' . l:filename)
+    call system(s:open_command . ' ' . l:filename)
 endfunction
 
 function! ConvertMarkdownToHTML() abort
@@ -61,5 +67,5 @@ function! ConvertMarkdownToHTML() abort
     let l:html = s:GenerateHTML()
 
     call writefile(split(l:html, "\n", 1), l:filename, 'b')
-    call system('open ' . l:filename)
+    call system(s:open_command . ' ' . l:filename)
 endfunction
