@@ -38,9 +38,10 @@ function! s:GenerateHTML() abort
     let l:filename = s:GetFilename()
     let l:html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
                 \ . '<meta http-equiv="X-UA-Compatible" content="IE=edge"/>'
-                \ . '<style type="text/css">' . l:bootstrapcontent . '</style><title>' . l:filename . '</title></head>'
-                \ . '<style type="text/css">' . l:csscontent . '</style><title>' . l:filename . '</title></head>'
-                \ . '<body>' . l:htmlcontent . '</body></html>'
+                \ . '<style type="text/css">' . l:bootstrapcontent . '</style>'
+                \ . '<style type="text/css">' . l:csscontent . '</style>'
+                \ . '<title>' . l:filename . '</title>'
+                \ . '</head><body>' . l:htmlcontent . '</body></html>'
 
     return l:html
 endfunction
