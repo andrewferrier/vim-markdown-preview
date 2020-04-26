@@ -1,4 +1,4 @@
-let s:scriptpath = expand('<sfile>:p:h')
+let s:scriptpath = expand('<sfile>:p:h:h')
 
 let s:open_command = 'open'
 
@@ -46,7 +46,7 @@ function! s:GenerateHTML() abort
     return l:html
 endfunction
 
-function! ConvertMarkdownToPDF() abort
+function! vim_markdown_preview#ConvertMarkdownToPDF() abort
     call s:CheckDependency('wkhtmltopdf')
 
     let l:filename = s:GenerateFilename('pdf')
@@ -55,7 +55,7 @@ function! ConvertMarkdownToPDF() abort
     call system(s:open_command . ' ' . l:filename . '&')
 endfunction
 
-function! ConvertMarkdownToDocX() abort
+function! vim_markdown_preview#ConvertMarkdownToDocX() abort
     call s:CheckDependency('pandoc')
 
     let l:filename = s:GenerateFilename('docx')
@@ -63,7 +63,7 @@ function! ConvertMarkdownToDocX() abort
     call system(s:open_command . ' ' . l:filename . '&')
 endfunction
 
-function! ConvertMarkdownToHTML() abort
+function! vim_markdown_preview#ConvertMarkdownToHTML() abort
     let l:filename = s:GenerateFilename('html')
     let l:html = s:GenerateHTML()
 

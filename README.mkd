@@ -1,42 +1,30 @@
 # vim-markdown-preview
 
 _vim-markdown-preview_ adds the option to preview markdown documents in the
-browser (using HTML) from the vim editor, or to export to MS Word.
+browser (using HTML) from the vim editor, or to export to MS Word or PDF.
 
 If previewing as HTML, the plugin uses bootstrap and jQuery to provide some
-basic styling. If previewing as MS Word, the plugin uses pandoc to convert.
+basic styling. If previewing as MS Word/PDF, the plugin uses pandoc to convert.
 
 ## Install
 
 Install using any standard [plugin
 manager](http://vi.stackexchange.com/questions/388/what-is-the-difference-between-the-vim-package-managers).
-You then need to run `npm install` inside the `plugin/` directory.
+You then need to run `npm install`.
 
 ## Usage
 
-Use the commands `ConvertMarkdownToHTML()` and `ConvertMarkdownToDocX()`
-directly, or binding them to keystrokes in your `~/.vimrc`:
+Map the functions `vim_markdown_preview#ConvertMarkdownToHTML()` and
+`vim_markdown_preview#ConvertMarkdownToDocX()` to keystrokes in your `~/.vimrc`:
 
-    autocmd FileType markdown nnoremap <buffer> <Leader>Ch :call ConvertMarkdownToHTML()<CR>
-    autocmd FileType markdown nnoremap <buffer> <Leader>Cw :call ConvertMarkdownToDocX()<CR>
+    autocmd FileType markdown nnoremap <buffer> <Leader>Ch :call vim_markdown_preview#ConvertMarkdownToHTML()<CR>
+    autocmd FileType markdown nnoremap <buffer> <Leader>Cw :call vim_markdown_preview#ConvertMarkdownToDocX()<CR>
+    autocmd FileType markdown nnoremap <buffer> <Leader>cp :call vim_markdown_preview#ConvertMarkdownToPDF()<CR>
 
 ## Dependencies
 
 * vim
-* pandoc (needs a separate install) - for Markdown-to-MSWord
-
-## OSX
-
-_vim-markdown-preview_ was written to run on OSX, and it will work w/o
-problems.
-I recommend the safari browser because it will not open new tabs needlessly
-if a document is already loaded in an existing tab/window.
-
-## Linux/Others
-
-_vim-markdown-preview_ is tied to the OSX command `open`.
-You will need to replace it with something else - firefox-bin, for example,
-for it to work on your operating system.
+* pandoc (needs a separate install) - for Markdown-to-MSWord or PDF
 
 ## Credit
 
