@@ -28,8 +28,6 @@ function! s:GenerateFilename(ext) abort
 endfunction
 
 function! s:GenerateHTML() abort
-    call s:CheckDependency('markdown-it')
-
     let l:markdownitwrapper = s:scriptpath . '/markdown-it-wrapper.js'
     let l:bootstrapcontent = system('cat "' . s:scriptpath . '/node_modules/bootstrap/dist/css/bootstrap.min.css"')
     let l:csscontent = system('cat "' . s:scriptpath . '/markdown-preview.css"')
