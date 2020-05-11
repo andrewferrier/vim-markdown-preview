@@ -16,7 +16,7 @@ function! s:GetFilename() abort
     if bufname('%') ==# ''
         let l:filename = 'No Name.md'
     else
-        let l:filename = bufname('%')
+        let l:filename = fnamemodify(bufname('%'), ':t')
     endif
 
     return l:filename
@@ -28,20 +28,11 @@ function! s:GenerateFilename(ext) abort
 endfunction
 
 function! s:GenerateHTML() abort
-    let l:markdownwrapper = s:scriptpath . '/markdown-wrapper.js'
-    let l:bootstrapcontent = system('cat "' . s:scriptpath . '/node_modules/bootstrap/dist/css/bootstrap.min.css"')
-    let l:csscontent = system('cat "' . s:scriptpath . '/markdown-preview.css"')
+    let l:filename = s:GetFilename()
+    let l:markdownwrapper = s:scriptpath . '/markdown-wrapper.js ' . l:filename
     let l:htmlcontent = system(l:markdownwrapper, join(getline(1,'$'),"\n"))
 
-    let l:filename = s:GetFilename()
-    let l:html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
-                \ . '<meta http-equiv="X-UA-Compatible" content="IE=edge"/>'
-                \ . '<style type="text/css">' . l:bootstrapcontent . '</style>'
-                \ . '<style type="text/css">' . l:csscontent . '</style>'
-                \ . '<title>' . l:filename . '</title>'
-                \ . '</head><body>' . l:htmlcontent . '</body></html>'
-
-    return l:html
+    return l:htmlcontent
 endfunction
 
 function! vim_markdown_preview#ConvertMarkdownToPDF() abort

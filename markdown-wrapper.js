@@ -4,24 +4,10 @@
 
 "use strict";
 
-const md = require("markdown-it")({
-  "html": true,
-  "typographer": true
-});
+// # https://github.com/jonschlinkert/markdown-toc
 
-// See https://github.com/markdown-it/markdown-it/issues/117#issuecomment-109386469
-/* eslint camelcase: ["off"] */
-md.renderer.rules.table_open = function table_open(tokens, idx) {
-  return "<table class=\"table\">";
-};
-
-md.use(require("markdown-it-table-of-contents"), {
-  /* eslint no-magic-numbers: ["error", { "ignore": [1, 2, 3] }] */
-  "includeLevel": [2, 3]
-});
-
-md.use(require("markdown-it-anchor"));
-md.use(require("markdown-it-checkbox"));
+const marked = require('marked');
+const fs = require('fs');
 
 const readFile = (encoding, callback) => {
   // read from stdin
@@ -46,12 +32,31 @@ readFile("utf8", (err, input) => {
   }
 
   try {
-    output = md.render(input);
+    const title = process.argv[2];
+    const bootstrapFile = fs.readFileSync(__dirname + "/node_modules/bootstrap/dist/css/bootstrap.min.css").toString();
+    const cssFile = fs.readFileSync(__dirname + "/markdown-preview.css").toString();
+    const html = marked(input);
+
+    const output =
+      '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>' +
+      '<meta http-equiv="X-UA-Compatible" content="IE=edge"/>' +
+      '<style type="text/css">' +
+      bootstrapFile +
+      "</style>" +
+      '<style type="text/css">' +
+      cssFile +
+      "</style>" +
+      "<title>" +
+      title +
+      "</title>" +
+      "</head><body>" +
+      html +
+      "</body></html>";
+
+    process.stdout.write(output);
   } catch (err2) {
     const errMessage = err2.stack || err2.message || String(err2);
 
     throw new Error(errMessage);
   }
-
-  process.stdout.write(output);
 });
