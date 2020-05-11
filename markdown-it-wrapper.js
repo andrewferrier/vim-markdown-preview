@@ -21,6 +21,7 @@ md.use(require("markdown-it-table-of-contents"), {
 });
 
 md.use(require("markdown-it-anchor"));
+md.use(require("markdown-it-checkbox"));
 
 const readFile = (encoding, callback) => {
   // read from stdin
