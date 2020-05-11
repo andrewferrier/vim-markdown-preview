@@ -28,10 +28,10 @@ function! s:GenerateFilename(ext) abort
 endfunction
 
 function! s:GenerateHTML() abort
-    let l:markdownitwrapper = s:scriptpath . '/markdown-it-wrapper.js'
+    let l:markdownwrapper = s:scriptpath . '/markdown-wrapper.js'
     let l:bootstrapcontent = system('cat "' . s:scriptpath . '/node_modules/bootstrap/dist/css/bootstrap.min.css"')
     let l:csscontent = system('cat "' . s:scriptpath . '/markdown-preview.css"')
-    let l:htmlcontent = system(l:markdownitwrapper, join(getline(1,'$'),"\n"))
+    let l:htmlcontent = system(l:markdownwrapper, join(getline(1,'$'),"\n"))
 
     let l:filename = s:GetFilename()
     let l:html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
