@@ -57,5 +57,5 @@ function! vim_markdown_preview#ConvertMarkdownToHTML() abort
     let l:html = s:GenerateHTML()
 
     call writefile(split(l:html, "\n", 1), l:filename, 'b')
-    call system(s:open_command . ' ' . l:filename . '&')
+    call system(s:open_command . ' ' . l:filename)
 endfunction
