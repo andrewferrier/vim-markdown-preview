@@ -8,7 +8,7 @@ endif
 
 function! s:CheckDependency(command) abort
     if !executable(a:command)
-        echoerr a:command . ' not available'
+        echohl WarningMsg | echoerr a:command . ' not available' | echohl None
     endif
 endfunction
 
