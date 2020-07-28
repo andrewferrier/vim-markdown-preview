@@ -6,8 +6,8 @@
 
 // # https://github.com/jonschlinkert/markdown-toc
 
-const marked = require('marked');
-const fs = require('fs');
+const marked = require("marked");
+const fs = require("fs");
 
 const renderer = new marked.Renderer();
 
@@ -23,13 +23,13 @@ const newTableRenderer = function table(header, body) {
   );
 };
 
-renderer.table = newTableRenderer
+renderer.table = newTableRenderer;
 
 const readFile = (encoding, callback) => {
   // read from stdin
   const chunks = [];
 
-  process.stdin.on("data", (chunk) => {
+  process.stdin.on("data", chunk => {
     chunks.push(chunk);
   });
 
@@ -49,8 +49,14 @@ readFile("utf8", (err, input) => {
 
   try {
     const title = process.argv[2];
-    const bootstrapFile = fs.readFileSync(__dirname + "/node_modules/bootstrap/dist/css/bootstrap.min.css").toString();
-    const cssFile = fs.readFileSync(__dirname + "/markdown-preview.css").toString();
+    const bootstrapFile = fs
+      .readFileSync(
+        __dirname + "/node_modules/bootstrap/dist/css/bootstrap.min.css"
+      )
+      .toString();
+    const cssFile = fs
+      .readFileSync(__dirname + "/markdown-preview.css")
+      .toString();
     const html = marked(input, { renderer: renderer });
 
     const output =
