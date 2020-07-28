@@ -9,6 +9,22 @@
 const marked = require('marked');
 const fs = require('fs');
 
+const renderer = new marked.Renderer();
+
+const newTableRenderer = function table(header, body) {
+  if (body) body = "<tbody>" + body + "</tbody>";
+  return (
+    '<table class="table">\n' +
+    "<thead>\n" +
+    header +
+    "</thead>\n" +
+    body +
+    "</table>\n"
+  );
+};
+
+renderer.table = newTableRenderer
+
 const readFile = (encoding, callback) => {
   // read from stdin
   const chunks = [];
@@ -35,7 +51,7 @@ readFile("utf8", (err, input) => {
     const title = process.argv[2];
     const bootstrapFile = fs.readFileSync(__dirname + "/node_modules/bootstrap/dist/css/bootstrap.min.css").toString();
     const cssFile = fs.readFileSync(__dirname + "/markdown-preview.css").toString();
-    const html = marked(input);
+    const html = marked(input, { renderer: renderer });
 
     const output =
       '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>' +
